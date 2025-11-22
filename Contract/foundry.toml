@@ -9,7 +9,9 @@ bytecode_hash = "none"
 optimizer_runs = 1000000
 
 [rpc_endpoints]
-goerli = "${GOERLI_RPC_URL}"
+base = "${BASEMAINNET_RPC_URL}"
+baseSepolia = "${BASESEPOLIA_RPC_URL}"
 
 [etherscan]
-goerli = { key = "${ETHERSCAN_API_KEY}" }
+baseSepolia = { key = "${ETHERSCAN_API_KEY}"}
+base = { key = "${ETHERSCAN_API_KEY}"}

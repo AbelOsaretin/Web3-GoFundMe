@@ -30,6 +30,7 @@ export function Navigation() {
             >
               Start a Project
             </Button>
+            <appkit-button />
           </div>
           <Button
             variant="ghost"
@@ -62,6 +63,7 @@ export function Navigation() {
             >
               Start a Project
             </Button>
+            <appkit-button />
           </div>
         )}
       </div>
@@ -69,6 +71,7 @@ export function Navigation() {
         isOpen={isStartProjectOpen}
         onClose={() => setIsStartProjectOpen(false)}
       />
+      <appkit-button />
     </nav>
   );
 }

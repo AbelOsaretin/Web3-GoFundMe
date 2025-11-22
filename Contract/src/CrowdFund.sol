@@ -23,6 +23,7 @@ contract CrowdFund {
     event Refund(uint id, address indexed caller, uint amount);
 
     struct Campaign {
+        uint id;
         string title;
         string description;
         string category;
@@ -70,6 +71,7 @@ contract CrowdFund {
         count += 1;
 
         campaigns[count] = Campaign({
+            id: count,
             title: _title,
             description: _description,
             category: _category,
