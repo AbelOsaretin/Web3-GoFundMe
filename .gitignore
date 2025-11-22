@@ -1,0 +1,98 @@
+
+# === Node & package manager ===
+node_modules/
+/.pnp/
+.pnp.js
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Typescript build info
+*.tsbuildinfo
+
+# === Next.js / Frontend ===
+.next/
+.vercel/
+.vercel/*
+out/
+build/
+/.next/cache/
+.next
+
+# Local env files (keep secrets out of git)
+.env.local
+.env.*.local
+.env.test
+.env.production.local
+
+# Next.js debug/temporary
+next-debug.log
+
+# Tailwind / PostCSS caches
+.cache/
+
+# === Foundry / Solidity (Contract/) ===
+Contract/cache/
+Contract/out/
+Contract/artifacts/
+Contract/forgeDeployments.json
+Contract/broadcast/
+Contract/script/broadcast.log.json
+Contract/*.dbg
+
+# Foundry generated test/run caches
+forge.cache/
+
+# Avoid ignoring the `lib/` folder — it's often vendored dependencies used by tests
+
+# === Logs, coverage and reports ===
+*debug.log
+*.log
+npm-debug.log*
+/yarn-error.log
+/coverage/
+/.nyc_output/
+
+# === OS files ===
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# === IDEs / Editors ===
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# JetBrains
+/.idea/
+*.iml
+
+# === Python artifacts (if any) ===
+__pycache__/
+*.py[cod]
+*.pyo
+venv/
+env/
+
+# === Misc / build artifacts ===
+dist/
+build/
+/.cache
+/.parcel-cache
+
+# Storybook
+storybook-static/
+
+# Lock files intentionally committed: keep pnpm-lock.yaml and package.json tracked
+
+# Local system files
+.coverage
+
+# Ignore local secret files
+*.secret
+*.key
+*.pem
+
+# End of .gitignore
