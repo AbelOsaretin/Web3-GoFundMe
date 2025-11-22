@@ -1,0 +1,1 @@
+self.__NEXT_FONT_MANIFEST="{\"pages\":{},\"app\":{\"/home/devabel/Codebase/Personal_Projects/web3-GoFundMe/Frontend/app/layout\":[\"static/media/fb751edd4b3a9ca4-s.p.woff2\",\"static/media/4cf2300e9c8272f7-s.p.woff2\"]},\"appUsingSizeAdjust\":true,\"pagesUsingSizeAdjust\":false}"

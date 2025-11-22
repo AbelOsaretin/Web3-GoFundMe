@@ -1,16 +1,16 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Menu, X, Users } from "lucide-react"
-import { StartProjectOverlay } from "@/components/start-project-overlay"
+import { useState } from "react";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Menu, X, Users } from "lucide-react";
+import { StartProjectOverlay } from "@/components/start-project-overlay";
 
 export function Navigation() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false)
-  const [isStartProjectOpen, setIsStartProjectOpen] = useState(false)
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isStartProjectOpen, setIsStartProjectOpen] = useState(false);
 
-  const toggleMenu = () => setIsMenuOpen(!isMenuOpen)
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
     <nav className="bg-secondary">
@@ -18,18 +18,31 @@ export function Navigation() {
         <div className="flex justify-between items-center">
           <Link href="/" className="flex items-center space-x-2">
             <Users className="h-6 w-6" />
-            <span className="text-xl font-bold">Crowdfunding Central</span>
+            <span className="text-xl font-bold">Web3-GoFundMe</span>
           </Link>
           <div className="hidden md:flex space-x-2">
             <Button variant="ghost" asChild>
               <Link href="/">Home</Link>
             </Button>
-            <Button variant="default" onClick={() => setIsStartProjectOpen(true)}>
+            <Button
+              variant="default"
+              onClick={() => setIsStartProjectOpen(true)}
+            >
               Start a Project
             </Button>
           </div>
-          <Button variant="ghost" size="icon" className="md:hidden" onClick={toggleMenu} aria-label="Toggle menu">
-            {isMenuOpen ? <X className="h-6 w-6" /> : <Menu className="h-6 w-6" />}
+          <Button
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            onClick={toggleMenu}
+            aria-label="Toggle menu"
+          >
+            {isMenuOpen ? (
+              <X className="h-6 w-6" />
+            ) : (
+              <Menu className="h-6 w-6" />
+            )}
           </Button>
         </div>
         {isMenuOpen && (
@@ -43,8 +56,8 @@ export function Navigation() {
               variant="default"
               className="w-full"
               onClick={() => {
-                setIsStartProjectOpen(true)
-                setIsMenuOpen(false)
+                setIsStartProjectOpen(true);
+                setIsMenuOpen(false);
               }}
             >
               Start a Project
@@ -52,7 +65,10 @@ export function Navigation() {
           </div>
         )}
       </div>
-      <StartProjectOverlay isOpen={isStartProjectOpen} onClose={() => setIsStartProjectOpen(false)} />
+      <StartProjectOverlay
+        isOpen={isStartProjectOpen}
+        onClose={() => setIsStartProjectOpen(false)}
+      />
     </nav>
-  )
+  );
 }

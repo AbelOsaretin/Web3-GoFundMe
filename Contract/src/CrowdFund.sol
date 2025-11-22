@@ -1,30 +1,16 @@
-/*
-    
-   ██████  ██████   ██████  ██   ██ ██████   ██████   ██████  ██   ██    ██████  ███████ ██    ██
-  ██      ██    ██ ██    ██ ██  ██  ██   ██ ██    ██ ██    ██ ██  ██     ██   ██ ██      ██    ██
-  ██      ██    ██ ██    ██ █████   ██████  ██    ██ ██    ██ █████      ██   ██ █████   ██    ██
-  ██      ██    ██ ██    ██ ██  ██  ██   ██ ██    ██ ██    ██ ██  ██     ██   ██ ██       ██  ██
-   ██████  ██████   ██████  ██   ██ ██████   ██████   ██████  ██   ██ ██ ██████  ███████   ████
-  
-  Find any smart contract, and build your project faster: https://www.cookbook.dev
-  Twitter: https://twitter.com/cookbook_dev
-  Discord: https://discord.gg/cookbookdev
-  
-  Find this contract on Cookbook: https://www.cookbook.dev/contracts/undefined?utm=code
-  */
-  
-  // SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.20;
 
 interface IERC20 {
     function transfer(address, uint) external returns (bool);
-
     function transferFrom(address, address, uint) external returns (bool);
 }
 
 contract CrowdFund {
     event Launch(
         uint id,
+        string title,
+        string description,
         address indexed creator,
         uint goal,
         uint32 startAt,
@@ -37,40 +23,56 @@ contract CrowdFund {
     event Refund(uint id, address indexed caller, uint amount);
 
     struct Campaign {
-        // Creator of campaign
+        string title;
+        string description;
+        string category;
         address creator;
-        // Amount of tokens to raise
         uint goal;
-        // Total amount pledged
         uint pledged;
-        // Timestamp of start of campaign
         uint32 startAt;
-        // Timestamp of end of campaign
         uint32 endAt;
-        // True if goal was reached and creator has claimed the tokens.
         bool claimed;
     }
 
-    IERC20 public immutable token;
-    // Total count of campaigns created.
-    // It is also used to generate id for new campaigns.
+    IERC20 public immutable TOKEN;
+
     uint public count;
-    // Mapping from id to Campaign
+
+    /// 🔥 Pattern 1: Store campaign IDs in an array
+    uint[] public campaignIds;
+
+    /// Campaign storage
     mapping(uint => Campaign) public campaigns;
-    // Mapping from campaign id => pledger => amount pledged
+
+    /// Pledges
     mapping(uint => mapping(address => uint)) public pledgedAmount;
 
     constructor(address _token) {
-        token = IERC20(_token);
+        TOKEN = IERC20(_token);
     }
 
-    function launch(uint _goal, uint32 _startAt, uint32 _endAt) external {
+    // -----------------------------------------------------
+    //                     CORE LOGIC
+    // -----------------------------------------------------
+
+    function launch(
+        string memory _title,
+        string memory _description,
+        string memory _category,
+        uint _goal,
+        uint32 _startAt,
+        uint32 _endAt
+    ) external {
         require(_startAt >= block.timestamp, "start at < now");
         require(_endAt >= _startAt, "end at < start at");
         require(_endAt <= block.timestamp + 90 days, "end at > max duration");
 
         count += 1;
+
         campaigns[count] = Campaign({
+            title: _title,
+            description: _description,
+            category: _category,
             creator: msg.sender,
             goal: _goal,
             pledged: 0,
@@ -79,7 +81,18 @@ contract CrowdFund {
             claimed: false
         });
 
-        emit Launch(count, msg.sender, _goal, _startAt, _endAt);
+        /// ⭐ Pattern 1: add to array so we can iterate later
+        campaignIds.push(count);
+
+        emit Launch(
+            count,
+            _title,
+            _description,
+            msg.sender,
+            _goal,
+            _startAt,
+            _endAt
+        );
     }
 
     function cancel(uint _id) external {
@@ -98,7 +111,9 @@ contract CrowdFund {
 
         campaign.pledged += _amount;
         pledgedAmount[_id][msg.sender] += _amount;
-        token.transferFrom(msg.sender, address(this), _amount);
+
+        bool success = TOKEN.transferFrom(msg.sender, address(this), _amount);
+        require(success, "Transfer failed");
 
         emit Pledge(_id, msg.sender, _amount);
     }
@@ -109,7 +124,9 @@ contract CrowdFund {
 
         campaign.pledged -= _amount;
         pledgedAmount[_id][msg.sender] -= _amount;
-        token.transfer(msg.sender, _amount);
+
+        bool success = TOKEN.transfer(msg.sender, _amount);
+        require(success, "Transfer failed");
 
         emit Unpledge(_id, msg.sender, _amount);
     }
@@ -122,7 +139,9 @@ contract CrowdFund {
         require(!campaign.claimed, "claimed");
 
         campaign.claimed = true;
-        token.transfer(campaign.creator, campaign.pledged);
+
+        bool success = TOKEN.transfer(campaign.creator, campaign.pledged);
+        require(success, "Transfer failed");
 
         emit Claim(_id);
     }
@@ -134,8 +153,30 @@ contract CrowdFund {
 
         uint bal = pledgedAmount[_id][msg.sender];
         pledgedAmount[_id][msg.sender] = 0;
-        token.transfer(msg.sender, bal);
+
+        bool success = TOKEN.transfer(msg.sender, bal);
+        require(success, "Transfer failed");
 
         emit Refund(_id, msg.sender, bal);
+    }
+
+    // -----------------------------------------------------
+    //             Pattern 1 helper getters
+    // -----------------------------------------------------
+
+    /// Return all campaigns in a single view call
+    function getAllCampaigns() external view returns (Campaign[] memory) {
+        Campaign[] memory list = new Campaign[](campaignIds.length);
+
+        for (uint i = 0; i < campaignIds.length; i++) {
+            list[i] = campaigns[campaignIds[i]];
+        }
+
+        return list;
+    }
+
+    /// Return the number of campaigns (same as campaignIds.length)
+    function getTotalCampaigns() external view returns (uint) {
+        return campaignIds.length;
     }
 }

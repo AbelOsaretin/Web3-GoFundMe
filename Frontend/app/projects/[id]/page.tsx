@@ -1,14 +1,22 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { notFound } from "next/navigation"
-import Image from "next/image"
-import { Button } from "@/components/ui/button"
-import { Progress } from "@/components/ui/progress"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { BookOpen, Leaf, Cpu, Palette, Heart, Users, LayoutGrid } from "lucide-react"
-import { DonationOverlay } from "@/components/donation-overlay"
-import projectsData from "@/data/projects.json"
+import { useState } from "react";
+import { notFound } from "next/navigation";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  BookOpen,
+  Leaf,
+  Cpu,
+  Palette,
+  Heart,
+  Users,
+  LayoutGrid,
+} from "lucide-react";
+import { DonationOverlay } from "@/components/donation-overlay";
+import projectsData from "@/data/projects.json";
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -18,7 +26,7 @@ const categoryIcons = {
   "Arts & Culture": Palette,
   Wellness: Heart,
   Community: Users,
-}
+};
 
 const categoryColors = {
   All: "text-blue-400",
@@ -28,18 +36,18 @@ const categoryColors = {
   "Arts & Culture": "text-pink-400",
   Wellness: "text-red-400",
   Community: "text-yellow-400",
-}
+};
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
-  const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false)
-  const project = projectsData.find((p) => p.id === Number.parseInt(params.id))
+  const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
+  const project = projectsData.find((p) => p.id === Number.parseInt(params.id));
 
   if (!project) {
-    notFound()
+    notFound();
   }
 
-  const progress = (project.raised / project.goal) * 100
-  const Icon = categoryIcons[project.category as keyof typeof categoryIcons]
+  const progress = (project.raised / project.goal) * 100;
+  const Icon = categoryIcons[project.category as keyof typeof categoryIcons];
 
   return (
     <div className="space-y-6">
@@ -48,8 +56,20 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
           <div className="flex items-center justify-between">
             <CardTitle className="text-3xl">{project.title}</CardTitle>
             <div className="flex items-center">
-              <Icon className={`w-6 h-6 mr-2 ${categoryColors[project.category as keyof typeof categoryColors]}`} />
-              <span className={`text-lg ${categoryColors[project.category as keyof typeof categoryColors]}`}>
+              <Icon
+                className={`w-6 h-6 mr-2 ${
+                  categoryColors[
+                    project.category as keyof typeof categoryColors
+                  ]
+                }`}
+              />
+              <span
+                className={`text-lg ${
+                  categoryColors[
+                    project.category as keyof typeof categoryColors
+                  ]
+                }`}
+              >
                 {project.category}
               </span>
             </div>
@@ -58,7 +78,7 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         <CardContent>
           <div className="h-48 md:h-64 lg:h-80 max-w-2xl mx-auto mb-6 relative">
             <Image
-              src={project.imageUrl || "/placeholder.svg"}
+              src={"/project-image.jpg"}
               alt={project.title}
               width={800}
               height={400}
@@ -72,13 +92,19 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
               <span>${project.raised.toLocaleString()} raised</span>
               <span>${project.goal.toLocaleString()} goal</span>
             </div>
-            <p className="text-muted-foreground">{project.daysLeft} days left to fund this project</p>
+            <p className="text-muted-foreground">
+              {project.daysLeft} days left to fund this project
+            </p>
           </div>
         </CardContent>
       </Card>
       <Card>
         <CardContent className="pt-6">
-          <Button size="lg" className="w-full" onClick={() => setIsDonationOverlayOpen(true)}>
+          <Button
+            size="lg"
+            className="w-full"
+            onClick={() => setIsDonationOverlayOpen(true)}
+          >
             Support This Project
           </Button>
         </CardContent>
@@ -90,9 +116,10 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         <CardContent>
           <p>{project.description}</p>
           <p className="mt-4">
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-            dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex
-            ea commodo consequat.
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
+            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
+            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
+            aliquip ex ea commodo consequat.
           </p>
         </CardContent>
       </Card>
@@ -102,5 +129,5 @@ export default function ProjectPage({ params }: { params: { id: string } }) {
         projectTitle={project.title}
       />
     </div>
-  )
+  );
 }
