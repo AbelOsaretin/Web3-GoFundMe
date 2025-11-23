@@ -73,17 +73,6 @@ export function StartProjectOverlay({
 
     const nowSeconds = Math.floor(Date.now() / 1000);
 
-    // Basic validation (mirror contract checks)
-    if (startSeconds < nowSeconds) {
-      throw new Error("Start date must be >= now");
-    }
-    if (endSeconds < startSeconds) {
-      throw new Error("End date must be >= start date");
-    }
-    if (endSeconds > nowSeconds + LAUNCH_MAX_DURATION) {
-      throw new Error("End date exceeds max duration (90 days)");
-    }
-
     // Ensure values fit uint32 (optional but safe)
     const MAX_UINT32 = 2 ** 32 - 1;
     if (startSeconds > MAX_UINT32 || endSeconds > MAX_UINT32) {
@@ -106,12 +95,15 @@ export function StartProjectOverlay({
       return;
     }
 
+    console.log("Writing to contract....");
     writeContract({
       abi,
-      address: "0x2CF2729f7fd4D786Be805cd19376A7bFa1c845fd",
+      address: "0x0b11251987217fE348E68A1308D9746C104AEFBA",
       functionName: "launch",
-      args: [title, description, category, goalWei, startSeconds, endSeconds],
+      args: [title, description, category, goalWei, endSeconds],
     });
+
+    console.log("Sent to Contract....");
 
     // Trigger confetti effect
     confetti({

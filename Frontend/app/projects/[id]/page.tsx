@@ -17,6 +17,8 @@ import {
 } from "lucide-react";
 import { DonationOverlay } from "@/components/donation-overlay";
 import projectsData from "@/data/projects.json";
+import { useReadContract } from "wagmi";
+import { abi } from "@/lib/abi";
 
 const categoryIcons = {
   All: LayoutGrid,
@@ -39,14 +41,22 @@ const categoryColors = {
 };
 
 export default function ProjectPage({ params }: { params: { id: string } }) {
+  const result = useReadContract({
+    abi,
+    address: "0x0b11251987217fE348E68A1308D9746C104AEFBA",
+    functionName: "campaigns",
+    args: [BigInt(params.id)],
+  });
+
+  console.log("Single Project Data ", result.data);
   const [isDonationOverlayOpen, setIsDonationOverlayOpen] = useState(false);
-  const project = projectsData.find((p) => p.id === Number.parseInt(params.id));
+  const project = result.data;
 
   if (!project) {
     notFound();
   }
 
-  const progress = (project.raised / project.goal) * 100;
+  const progress = (project.pledged / project.goal) * 100;
   const Icon = categoryIcons[project.category as keyof typeof categoryIcons];
 
   return (

@@ -34,7 +34,6 @@ export const abi = [
         { "name": "creator", "type": "address", "internalType": "address" },
         { "name": "goal", "type": "uint256", "internalType": "uint256" },
         { "name": "pledged", "type": "uint256", "internalType": "uint256" },
-        { "name": "startAt", "type": "uint32", "internalType": "uint32" },
         { "name": "endAt", "type": "uint32", "internalType": "uint32" },
         { "name": "claimed", "type": "bool", "internalType": "bool" }
       ],
@@ -86,7 +85,6 @@ export const abi = [
             { "name": "creator", "type": "address", "internalType": "address" },
             { "name": "goal", "type": "uint256", "internalType": "uint256" },
             { "name": "pledged", "type": "uint256", "internalType": "uint256" },
-            { "name": "startAt", "type": "uint32", "internalType": "uint32" },
             { "name": "endAt", "type": "uint32", "internalType": "uint32" },
             { "name": "claimed", "type": "bool", "internalType": "bool" }
           ]
@@ -109,7 +107,6 @@ export const abi = [
         { "name": "_description", "type": "string", "internalType": "string" },
         { "name": "_category", "type": "string", "internalType": "string" },
         { "name": "_goal", "type": "uint256", "internalType": "uint256" },
-        { "name": "_startAt", "type": "uint32", "internalType": "uint32" },
         { "name": "_endAt", "type": "uint32", "internalType": "uint32" }
       ],
       "outputs": [],
@@ -213,12 +210,6 @@ export const abi = [
           "type": "uint256",
           "indexed": false,
           "internalType": "uint256"
-        },
-        {
-          "name": "startAt",
-          "type": "uint32",
-          "indexed": false,
-          "internalType": "uint32"
         },
         {
           "name": "endAt",
