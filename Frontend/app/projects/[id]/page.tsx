@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useParams } from "next/navigation";
 import { notFound } from "next/navigation";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
@@ -40,12 +41,18 @@ const categoryColors = {
   Community: "text-yellow-400",
 };
 
-export default function ProjectPage({ params }: { params: { id: string } }) {
+export default function ProjectPage() {
+  // useParams() is the supported way to access route params inside a client component
+  const params = useParams();
+  const idParam = params?.id;
+  // convert route id (string) to a number for contract calls
+  const idAsNumber = idParam ? Number(idParam) : undefined;
+
   const result = useReadContract({
     abi,
     address: "0x0b11251987217fE348E68A1308D9746C104AEFBA",
     functionName: "campaigns",
-    args: [BigInt(params.id)],
+    args: idAsNumber !== undefined ? [idAsNumber] : undefined,
   });
 
   console.log("Single Project Data ", result.data);
