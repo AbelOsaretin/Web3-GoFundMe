@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { Navigation } from "@/components/navigation";
 import { headers } from "next/headers"; // added
 import ContextProvider from "@/context";
+import { ContractDataProvider } from "@/context/ContractDataContext";
 
 const geistSans = Geist({
   subsets: ["latin"],
@@ -34,14 +35,16 @@ export default async function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} font-sans antialiased`}
       >
         <ContextProvider cookies={cookies}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-            <div className="min-h-screen bg-background text-foreground">
-              <Navigation />
-              <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
-                <div className="max-w-4xl mx-auto">{children}</div>
-              </main>
-            </div>
-          </ThemeProvider>
+          <ContractDataProvider>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
+              <div className="min-h-screen bg-background text-foreground">
+                <Navigation />
+                <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+                  <div className="max-w-4xl mx-auto">{children}</div>
+                </main>
+              </div>
+            </ThemeProvider>
+          </ContractDataProvider>
         </ContextProvider>
       </body>
     </html>

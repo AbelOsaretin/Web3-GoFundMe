@@ -25,7 +25,6 @@ export default function Home() {
   const [isStartProjectOpen, setIsStartProjectOpen] = useState(false);
   const [contractData, setContractData] = useState<any[]>([]);
 
-  console.log("Result From Contract Read: ", result.data);
   const filteredProjects =
     selectedCategory === "All"
       ? contractData
@@ -53,6 +52,15 @@ export default function Home() {
           onClick={() => setIsStartProjectOpen(true)}
         >
           Start a Project
+        </Button>
+        <br />
+        <Button
+          size="lg"
+          className="mt-4"
+          onClick={() => console.log("Minting Test Tokens...")}
+          disabled
+        >
+          Mint Test Tokens
         </Button>
       </div>
       <CategoryFilter

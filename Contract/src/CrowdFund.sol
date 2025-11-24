@@ -93,11 +93,11 @@ contract CrowdFund {
         Campaign storage campaign = campaigns[_id];
         require(block.timestamp <= campaign.endAt, "ended");
 
-        campaign.pledged += _amount;
-        pledgedAmount[_id][msg.sender] += _amount;
-
         bool success = TOKEN.transferFrom(msg.sender, address(this), _amount);
         require(success, "Transfer failed");
+
+        campaign.pledged += _amount;
+        pledgedAmount[_id][msg.sender] += _amount;
 
         emit Pledge(_id, msg.sender, _amount);
     }
@@ -106,11 +106,11 @@ contract CrowdFund {
         Campaign storage campaign = campaigns[_id];
         require(block.timestamp <= campaign.endAt, "ended");
 
-        campaign.pledged -= _amount;
-        pledgedAmount[_id][msg.sender] -= _amount;
-
         bool success = TOKEN.transfer(msg.sender, _amount);
         require(success, "Transfer failed");
+
+        campaign.pledged -= _amount;
+        pledgedAmount[_id][msg.sender] -= _amount;
 
         emit Unpledge(_id, msg.sender, _amount);
     }
@@ -122,10 +122,10 @@ contract CrowdFund {
         require(campaign.pledged >= campaign.goal, "pledged < goal");
         require(!campaign.claimed, "claimed");
 
-        campaign.claimed = true;
-
         bool success = TOKEN.transfer(campaign.creator, campaign.pledged);
         require(success, "Transfer failed");
+
+        campaign.claimed = true;
 
         emit Claim(_id);
     }
@@ -135,11 +135,11 @@ contract CrowdFund {
         require(block.timestamp > campaign.endAt, "not ended");
         require(campaign.pledged < campaign.goal, "pledged >= goal");
 
-        uint bal = pledgedAmount[_id][msg.sender];
-        pledgedAmount[_id][msg.sender] = 0;
-
         bool success = TOKEN.transfer(msg.sender, bal);
         require(success, "Transfer failed");
+
+        uint bal = pledgedAmount[_id][msg.sender];
+        pledgedAmount[_id][msg.sender] = 0;
 
         emit Refund(_id, msg.sender, bal);
     }

@@ -53,8 +53,6 @@ interface Project {
 }
 
 export function ProjectCard({ project }: { project: Project }) {
-  console.log("Project Card ", project);
-
   // Helpers to safely convert on-chain values (BigInt or BigNumber) to JS numbers for UI
   const toWeiString = (v: any): string => {
     if (v === undefined || v === null) return "0";
@@ -90,7 +88,8 @@ export function ProjectCard({ project }: { project: Project }) {
 
   const goalNum = formatWeiToFloat(project.goal);
   const pledgedNum = formatWeiToFloat(project.pledged);
-  const progress = goalNum === 0 ? 0 : (pledgedNum / goalNum) * 100;
+  // const progress = goalNum === 0 ? 0 : (pledgedNum / goalNum) * 100;
+  const progress = (pledgedNum / goalNum) * 100;
   const Icon = categoryIcons[project.category as keyof typeof categoryIcons];
 
   const endSeconds = Number(project.endAt); // e.g. 1763942400
